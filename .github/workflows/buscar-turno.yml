@@ -2,25 +2,23 @@ name: Buscar turnos COSEM
 
 on:
   schedule:
-    - cron: "*/10 * * * *"  # cada 10 minutos
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
-  ejecutar:
+  run-script:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Clonar repo
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Instalar Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.10
 
-      - name: Install dependencies
-        run: |
-          pip install selenium webdriver-manager requests
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
 
       - name: Ejecutar script
         env:
@@ -31,5 +29,6 @@ jobs:
           TELEGRAM_CHAT_IDS: ${{ secrets.TELEGRAM_CHAT_IDS }}
           USUARIO_COSEM: ${{ secrets.USUARIO_COSEM }}
           PASSWORD_COSEM: ${{ secrets.PASSWORD_COSEM }}
-        run: python main.py
+        run: python buscar_turno.py
+
 
