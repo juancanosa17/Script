@@ -59,9 +59,9 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "BERASAIN, DANIEL")]/../../..'))
         ).click()
 
-        # --- Validación definitiva: buscar bloques con horario (hora de turno real) ---
+        # Nueva detección confiable de horarios visibles reales
         try:
-            horarios = driver.find_elements(By.CSS_SELECTOR, "div.ust_hour_column")
+            horarios = driver.find_elements(By.CSS_SELECTOR, "span[id^='span_'][id*='vHORAGRILLA_']")
         except:
             horarios = []
 
@@ -69,11 +69,13 @@ def buscar_turno():
         print(f"🔎 Cantidad de horarios encontrados: {cantidad_turnos}")
 
         if cantidad_turnos > 0:
+            mensaje = "🟢 ¡Hay horarios disponibles para BERASAIN, DANIEL!\n" + "\n".join(f"- {hora}" for hora in horarios)
             print("🟩 Hay turnos disponibles.")
-            enviar_telegram("🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!")
         else:
+            mensaje = "🔴 No hay horarios disponibles para BERASAIN, DANIEL."
             print("🟥 No hay turnos.")
-            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
+
+        enviar_telegram(mensaje)
 
     except Exception as e:
         print(f"⚠️ Error en el proceso: {e}")
