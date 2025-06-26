@@ -63,17 +63,38 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
         ).click()
         
-        # Ver si aparece el cartel de "sin horarios"
+        # Esperar máximo 5s a que aparezca alguna señal de resultado
         try:
-            cartel = WebDriverWait(driver, 5).until(
+            WebDriverWait(driver, 5).until_any([
+                EC.presence_of_element_located((By.ID, "MaterialDesignMessage_PositiveAction")),
+                EC.presence_of_element_located((By.XPATH, "//span[contains(@id,'vHORAGRILLA_')]")),
+                EC.presence_of_element_located((By.XPATH, "//img[contains(@src,'Agenda-Nohayhorariosdisponibles.svg')]")),
+            ])
+        except:
+            print("⚠️ Ninguna señal apareció tras hacer clic. Podría haber error de carga o estructura cambiada.")
+        
+        # Ver si aparece cartel
+        try:
+            cartel = WebDriverWait(driver, 2).until(
                 EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))
             )
             cartel.click()
             print("🟥 Apareció cartel de 'No hay horarios disponibles'.")
             enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
-            return  # salir del método
+            return
         except:
-            print("✅ No apareció cartel, posiblemente haya horarios.")
+            pass
+        
+        # Ver si aparece imagen de "no hay horarios"
+        try:
+            driver.find_element(By.XPATH, "//img[contains(@src,'Agenda-Nohayhorariosdisponibles.svg')]")
+            print("🖼️ Imagen de 'No hay horarios disponibles' detectada.")
+            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
+            return
+        except:
+            pass
+        
+        print("✅ Ningún cartel ni imagen detectados. Se buscarán horarios...")
 
         # --- Esperar explícitamente los horarios ---
         try:
