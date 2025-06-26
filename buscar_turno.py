@@ -59,36 +59,23 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
         ).click()
 
-        # --- Validación del cartel y la imagen ---
-        aparece_el_cartel = False
-        aparece_la_imagen = False
-
+        # --- Nueva validación: buscar directamente bloques de turnos disponibles ---
         try:
-            boton_ok = WebDriverWait(driver, 5).until(
-                EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))
+            turnos_disponibles = WebDriverWait(driver, 5).until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.row.ust_padding_bottom_8px"))
             )
-            boton_ok.click()
-            aparece_el_cartel = True
-            print("🧩 Apareció el cartel con botón OK.")
         except:
-            print("⛔ No apareció el cartel con botón OK.")
+            turnos_disponibles = []
 
-        try:
-            WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, '//img[contains(@src, "Agenda-Nohayhorariosdisponibles.svg")]'))
-            )
-            aparece_la_imagen = True
-            print("🖼️ Apareció la imagen de 'no hay horarios'.")
-        except:
-            print("🔍 No apareció la imagen de 'no hay horarios'.")
+        cantidad_turnos = len(turnos_disponibles)
+        print(f"🔎 Cantidad de turnos encontrados: {cantidad_turnos}")
 
-        # --- Evaluación final ---
-        if aparece_el_cartel or aparece_la_imagen:
-            print("🟥 No hay turnos.")
-            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
-        else:
+        if cantidad_turnos > 0:
             print("🟩 Hay turnos disponibles.")
             enviar_telegram("🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!")
+        else:
+            print("🟥 No hay turnos.")
+            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
 
     except Exception as e:
         print(f"⚠️ Error en el proceso: {e}")
