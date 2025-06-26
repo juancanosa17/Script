@@ -59,19 +59,28 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
         ).click()
 
-        try:
-            WebDriverWait(driver, 5).until(
-                EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))
-            ).click()
-            aparece_el_cartel = True
-        except:
-            aparece_el_cartel = False
+        # --- Validación del cartel y la imagen ---
+        aparece_el_cartel = False
+        aparece_la_imagen = False
 
         try:
-            driver.find_element(By.XPATH, '//img[contains(@src, "Agenda-Nohayhorariosdisponibles.svg")]')
-            aparece_la_imagen = True
+            boton_ok = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))
+            )
+            boton_ok.click()
+            aparece_el_cartel = True
+            print("🧩 Apareció el cartel con botón OK.")
         except:
-            aparece_la_imagen = False
+            print("⛔ No apareció el cartel con botón OK.")
+
+        try:
+            WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, '//img[contains(@src, "Agenda-Nohayhorariosdisponibles.svg")]'))
+            )
+            aparece_la_imagen = True
+            print("🖼️ Apareció la imagen de 'no hay horarios'.")
+        except:
+            print("🔍 No apareció la imagen de 'no hay horarios'.")
 
         # --- Evaluación final ---
         if aparece_el_cartel or aparece_la_imagen:
