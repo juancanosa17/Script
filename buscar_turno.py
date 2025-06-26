@@ -36,6 +36,8 @@ def buscar_turno():
     options.add_argument('--disable-software-rasterizer')
     options.add_argument('--window-size=1920,1080')
 
+    driver = None
+
     try:
         driver.get("https://portal.cosem.com.uy/PortalWeb/uy.com.ust.hsglogin")
 
