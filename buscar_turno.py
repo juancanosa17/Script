@@ -61,7 +61,8 @@ def buscar_turno():
 
         # Nueva detección confiable de horarios visibles reales
         try:
-            horarios = driver.find_elements(By.CSS_SELECTOR, "span[id^='span_'][id*='vHORAGRILLA_']")
+            elementos_hora = driver.find_elements(By.CSS_SELECTOR, "span[id^='span_'][id*='vHORAGRILLA_']")
+            horarios = [elem.text.strip() for elem in elementos_hora if elem.text.strip()]
         except:
             horarios = []
 
