@@ -1,15 +1,14 @@
-# Esto es solo para reactivar, no afecta el código
-# Última actualización: 25/06
 name: Buscar turnos COSEM
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+    - cron: '15,45 * * * *'  # Ejecuta dos veces por hora (15 y 45 min UTC)
+  workflow_dispatch:         # Permite ejecución manual desde GitHub
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
+
     steps:
       - name: Clonar repo
         uses: actions/checkout@v3
