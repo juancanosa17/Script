@@ -59,23 +59,27 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "BERASAIN, DANIEL")]/../../..'))
         ).click()
 
-        # Nueva detección confiable de horarios visibles reales
+        # --- Esperar explícitamente los horarios ---
         try:
-            elementos_hora = driver.find_elements(By.CSS_SELECTOR, "span[id^='span_'][id*='vHORAGRILLA_']")
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//span[contains(@id,'vHORAGRILLA_')]"))
+            )
+            elementos_hora = driver.find_elements(By.XPATH, "//span[contains(@id,'vHORAGRILLA_')]")
             horarios = [elem.text.strip() for elem in elementos_hora if elem.text.strip()]
-        except:
+        except Exception as e:
+            print(f"⚠️ No se encontraron elementos de horario: {e}")
             horarios = []
-
+        
         cantidad_turnos = len(horarios)
         print(f"🔎 Cantidad de horarios encontrados: {cantidad_turnos}")
-
+        
         if cantidad_turnos > 0:
             mensaje = "🟢 ¡Hay horarios disponibles para BERASAIN, DANIEL!\n" + "\n".join(f"- {hora}" for hora in horarios)
             print("🟩 Hay turnos disponibles.")
         else:
             mensaje = "🔴 No hay horarios disponibles para BERASAIN, DANIEL."
             print("🟥 No hay turnos.")
-
+        
         enviar_telegram(mensaje)
 
     except Exception as e:
