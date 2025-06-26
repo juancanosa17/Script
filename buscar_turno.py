@@ -1,7 +1,6 @@
 import os
 import time
 import ssl
-import smtplib
 import requests
 
 from selenium import webdriver
@@ -13,9 +12,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-EMAIL_REMITENTE = os.environ["EMAIL_REMITENTE"]
-EMAIL_DESTINATARIO = os.environ["EMAIL_DESTINATARIO"]
-EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 TELEGRAM_CHAT_IDS = os.environ["TELEGRAM_CHAT_IDS"].split(",")
 USUARIO_COSEM = os.environ["USUARIO_COSEM"]
@@ -30,16 +26,6 @@ def enviar_telegram(mensaje):
             print(f"✅ Telegram enviado a {chat_id}")
         except Exception as e:
             print(f"❌ Error al enviar Telegram: {e}")
-
-def enviar_alerta_turno():
-    asunto = "🩺 ¡Hay turnos disponibles!"
-    mensaje = "El profesional FERNANDEZ, ALEJANDRO tiene horarios disponibles."
-    email_text = f"Subject: {asunto}\n\n{mensaje}"
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        server.login(EMAIL_REMITENTE, EMAIL_PASSWORD)
-        server.sendmail(EMAIL_REMITENTE, EMAIL_DESTINATARIO, email_text)
-    print("📧 Mail enviado.")
 
 def buscar_turno():
     options = Options()
@@ -79,7 +65,6 @@ def buscar_turno():
             enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
         except:
             print("🟩 Hay turnos disponibles.")
-            enviar_alerta_turno()
             enviar_telegram("🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!")
 
     except Exception as e:
