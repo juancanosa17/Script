@@ -32,7 +32,9 @@ def buscar_turno():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    options.add_argument('--disable-gpu')
+    options.add_argument('--disable-software-rasterizer')
+    options.add_argument('--window-size=1920,1080')
 
     try:
         driver.get("https://portal.cosem.com.uy/PortalWeb/uy.com.ust.hsglogin")
