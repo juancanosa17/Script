@@ -59,16 +59,14 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
         ).click()
 
-        # --- Nueva validación: buscar directamente bloques de turnos disponibles ---
+        # --- Validación definitiva: buscar bloques con horario (hora de turno real) ---
         try:
-            turnos_disponibles = WebDriverWait(driver, 5).until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.row.ust_padding_bottom_8px"))
-            )
+            horarios = driver.find_elements(By.CSS_SELECTOR, "div.ust_hour_column")
         except:
-            turnos_disponibles = []
+            horarios = []
 
-        cantidad_turnos = len(turnos_disponibles)
-        print(f"🔎 Cantidad de turnos encontrados: {cantidad_turnos}")
+        cantidad_turnos = len(horarios)
+        print(f"🔎 Cantidad de horarios encontrados: {cantidad_turnos}")
 
         if cantidad_turnos > 0:
             print("🟩 Hay turnos disponibles.")
