@@ -62,6 +62,18 @@ def buscar_turno():
         WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
         ).click()
+        
+        # Ver si aparece el cartel de "sin horarios"
+        try:
+            cartel = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))
+            )
+            cartel.click()
+            print("🟥 Apareció cartel de 'No hay horarios disponibles'.")
+            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
+            return  # salir del método
+        except:
+            print("✅ No apareció cartel, posiblemente haya horarios.")
 
         # --- Esperar explícitamente los horarios ---
         try:
