@@ -59,22 +59,40 @@ def buscar_turno():
             EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "BERASAIN, DANIEL")]/../../..'))
         ).click()
 
-        # --- Esperar explícitamente los horarios ---
+        # --- Detección de días y horarios ---
         try:
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, "//span[contains(@id,'vHORAGRILLA_')]"))
             )
-            elementos_hora = driver.find_elements(By.XPATH, "//span[contains(@id,'vHORAGRILLA_')]")
-            horarios = [elem.text.strip() for elem in elementos_hora if elem.text.strip()]
-        except Exception as e:
-            print(f"⚠️ No se encontraron elementos de horario: {e}")
-            horarios = []
         
-        cantidad_turnos = len(horarios)
-        print(f"🔎 Cantidad de horarios encontrados: {cantidad_turnos}")
+            spans_hora = driver.find_elements(By.XPATH, "//span[contains(@id,'vHORAGRILLA_')]")
+            spans_dia = driver.find_elements(By.XPATH, "//span[contains(@id,'vTEXTO3_')]")
+        
+            turnos = []
+        
+            for span_h in spans_hora:
+                id_suffix = span_h.get_attribute("id").split("_")[-1]
+                hora = span_h.text.strip()
+        
+                # Buscar el día correspondiente con el mismo sufijo
+                dia = ""
+                for span_d in spans_dia:
+                    if span_d.get_attribute("id").endswith(id_suffix):
+                        dia = span_d.text.strip()
+                        break
+        
+                if hora and dia:
+                    turnos.append(f"{dia} - {hora}")
+        
+        except Exception as e:
+            print(f"⚠️ Error al buscar horarios y días: {e}")
+            turnos = []
+        
+        cantidad_turnos = len(turnos)
+        print(f"🔎 Cantidad de turnos encontrados: {cantidad_turnos}")
         
         if cantidad_turnos > 0:
-            mensaje = "🟢 ¡Hay horarios disponibles para BERASAIN, DANIEL!\n" + "\n".join(f"- {hora}" for hora in horarios)
+            mensaje = "🟢 ¡Hay horarios disponibles para BERASAIN, DANIEL!\n" + "\n".join(f"- {t}" for t in turnos)
             print("🟩 Hay turnos disponibles.")
         else:
             mensaje = "🔴 No hay horarios disponibles para BERASAIN, DANIEL."
