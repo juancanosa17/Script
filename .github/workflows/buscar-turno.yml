@@ -1,3 +1,5 @@
+# Esto es solo para reactivar, no afecta el código
+# Última actualización: 25/06
 name: Buscar turnos COSEM
 
 on:
@@ -30,7 +32,6 @@ jobs:
           USUARIO_COSEM: ${{ secrets.USUARIO_COSEM }}
           PASSWORD_COSEM: ${{ secrets.PASSWORD_COSEM }}
         run: python buscar_turno.py
-
 
 
 
