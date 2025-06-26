@@ -52,11 +52,11 @@ def buscar_turno():
         driver.switch_to.frame(iframe)
 
         search_input = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, "MDSEARCHBAR1Container_navbar")))
-        search_input.send_keys("FERNANDEZ")
+        search_input.send_keys("BERASAIN")
         search_input.send_keys(Keys.ENTER)
 
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
+            EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "BERASAIN, DANIEL")]/../../..'))
         ).click()
 
         # --- Validación definitiva: buscar bloques con horario (hora de turno real) ---
