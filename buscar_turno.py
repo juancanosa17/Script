@@ -89,8 +89,10 @@ def buscar_turno():
                     turnos.append(f"{dia} - {hora}")
         
         except Exception as e:
-            print(f"⚠️ Error al buscar horarios y días: {e}")
-            turnos = []
+            print(f"⚠️ Error en el proceso: {e}")
+        finally:
+            if driver is not None:
+                driver.quit()
         
         cantidad_turnos = len(turnos)
         print(f"🔎 Cantidad de turnos encontrados: {cantidad_turnos}")
