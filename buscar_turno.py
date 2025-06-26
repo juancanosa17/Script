@@ -60,10 +60,24 @@ def buscar_turno():
         ).click()
 
         try:
-            WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))).click()
+            WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.ID, "MaterialDesignMessage_PositiveAction"))
+            ).click()
+            aparece_el_cartel = True
+        except:
+            aparece_el_cartel = False
+
+        try:
+            driver.find_element(By.XPATH, '//img[contains(@src, "Agenda-Nohayhorariosdisponibles.svg")]')
+            aparece_la_imagen = True
+        except:
+            aparece_la_imagen = False
+
+        # --- Evaluación final ---
+        if aparece_el_cartel or aparece_la_imagen:
             print("🟥 No hay turnos.")
             enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
-        except:
+        else:
             print("🟩 Hay turnos disponibles.")
             enviar_telegram("🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!")
 
