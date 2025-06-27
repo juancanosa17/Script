@@ -56,11 +56,11 @@ def buscar_turno():
         driver.switch_to.frame(iframe)
 
         search_input = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, "MDSEARCHBAR1Container_navbar")))
-        search_input.send_keys("BERASAIN")
+        search_input.send_keys("FERNANDEZ")
         search_input.send_keys(Keys.ENTER)
 
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "BERASAIN, DANIEL")]/../../..'))
+            EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"divTableCell") and contains(., "FERNANDEZ, ALEJANDRO")]/../../..'))
         ).click()
         
         # Esperar máximo 5s a que aparezca alguna señal de resultado
@@ -112,6 +112,8 @@ def buscar_turno():
         if cantidad_turnos > 0:
             mensaje = "🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!\n" + "\n".join(f"- {hora}" for hora in horarios)
             print("🟩 Hay turnos disponibles.")
+        else
+            print("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
         
         enviar_telegram(mensaje)
 
