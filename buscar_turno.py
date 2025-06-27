@@ -80,7 +80,6 @@ def buscar_turno():
             )
             cartel.click()
             print("🟥 Apareció cartel de 'No hay horarios disponibles'.")
-            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
             return
         except:
             pass
@@ -89,7 +88,7 @@ def buscar_turno():
         try:
             driver.find_element(By.XPATH, "//img[contains(@src,'Agenda-Nohayhorariosdisponibles.svg')]")
             print("🖼️ Imagen de 'No hay horarios disponibles' detectada.")
-            enviar_telegram("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
+            print("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
             return
         except:
             pass
@@ -113,9 +112,6 @@ def buscar_turno():
         if cantidad_turnos > 0:
             mensaje = "🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!\n" + "\n".join(f"- {hora}" for hora in horarios)
             print("🟩 Hay turnos disponibles.")
-        else:
-            mensaje = "🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO."
-            print("🟥 No hay turnos.")
         
         enviar_telegram(mensaje)
 
