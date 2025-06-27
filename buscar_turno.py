@@ -112,11 +112,10 @@ def buscar_turno():
         if cantidad_turnos > 0:
             mensaje = "🟢 ¡Hay horarios disponibles para FERNANDEZ, ALEJANDRO!\n" + "\n".join(f"- {hora}" for hora in horarios)
             print("🟩 Hay turnos disponibles.")
+            enviar_telegram(mensaje)
         else:
             print("🔴 No hay horarios disponibles para FERNANDEZ, ALEJANDRO.")
         
-        enviar_telegram(mensaje)
-
     except Exception as e:
         print(f"⚠️ Error en el proceso: {e}")
     finally:
