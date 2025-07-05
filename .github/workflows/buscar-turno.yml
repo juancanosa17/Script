@@ -1,8 +1,8 @@
 name: Buscar turnos COSEM
 
 on:
-  schedule:
-    - cron: '15,45 * * * *'  # Ejecuta dos veces por hora (15 y 45 min UTC)
+  #schedule:
+  #  - cron: '15,45 * * * *'  # Ejecuta dos veces por hora (15 y 45 min UTC)
   workflow_dispatch:         # Permite ejecución manual desde GitHub
 
 jobs:
